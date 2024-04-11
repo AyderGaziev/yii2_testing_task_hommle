@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\Inflector;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "product".
@@ -16,6 +18,14 @@ use Yii;
  */
 class Product extends \yii\db\ActiveRecord
 {
+
+
+    /**
+     * @var UploadedFile
+     */
+    public $imageFile;
+
+
     /**
      * {@inheritdoc}
      */
@@ -30,9 +40,10 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['image', 'SKU', 'name', 'count', 'type'], 'required'],
+            [['SKU', 'name', 'count', 'type'], 'required'],
             [['count'], 'integer'],
             [['image', 'SKU', 'name', 'type'], 'string', 'max' => 255],
+            [['imageFile'], 'image', 'skipOnEmpty' =>false,'extensions'=>'png, jpg']
         ];
     }
 
@@ -50,4 +61,18 @@ class Product extends \yii\db\ActiveRecord
             'type' => 'Тип товара',
         ];
     }
+
+    public function upload():string {
+            \Yii::error('IS METHOD VAL');
+
+            $fileName = (strtolower(Inflector::transliterate($this->imageFile->baseName)));
+
+            $this->image = 'uploads/'. $fileName . '.' . $this->imageFile->extension;
+
+
+            $this->imageFile->saveAs($this->image);
+            return true;
+
+    }
+
 }

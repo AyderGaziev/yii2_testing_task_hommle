@@ -4,6 +4,10 @@ namespace app\models;
 
 class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 {
+    const ROLE_USER = 10;
+    const ROLE_ADMIN = 20;
+
+
     public $id;
     public $username;
     public $password;
